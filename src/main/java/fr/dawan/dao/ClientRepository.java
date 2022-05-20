@@ -4,12 +4,12 @@ import fr.dawan.entities.Client;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class ClientRepository implements IClientRepository
 {
-
     @Override
     public void saveClient(Client client)
     {
@@ -53,7 +53,7 @@ public class ClientRepository implements IClientRepository
     @Override
     public List<Client> getAllClients()
     {
-        List<Client> clients = null;
+        List<Client> clients;
         EntityManager manager = IClientRepository.createEntityManager();
 
         String sql = "SELECT entity FROM " + Client.class.getName() + " entity";
@@ -102,7 +102,15 @@ public class ClientRepository implements IClientRepository
     }
 
     @Override
-    public List<Client> findCLientsByKey(String nom) {
-        return null;
+    public List<Client> findCLientsByKey(String nom)
+    {
+        List<Client> clients;
+        EntityManager manager = IClientRepository.createEntityManager();
+
+        String sql = "SELECT * FROM Client WHERE cl_name LIKE '%"+nom+"%'";
+        Query query = manager.createNativeQuery(sql, Client.class);
+        clients = query.getResultList();
+        manager.close();
+        return clients;
     }
 }
