@@ -1,18 +1,24 @@
 package fr.dawan.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collection;
 
-@Entity(name="COMPTE")
+@Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "CPTE_TYPE",
         discriminatorType= DiscriminatorType.STRING,length=15)
@@ -27,6 +33,11 @@ public abstract class Compte implements Serializable
     private double solde;
     @Column(name="c_dateCreation")
     private LocalDate dateCreation;
+    @ManyToOne
+    @JoinColumn(name = "CODE_CLI")
+    private Client client;
+    @OneToMany(mappedBy = "compte", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    private Collection<Operation> operations;
 
     public Compte()
     {
@@ -61,6 +72,15 @@ public abstract class Compte implements Serializable
     public void setDateCreation(LocalDate dateCreation) {
         this.dateCreation = dateCreation;
     }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
     //endregion
 
     protected String getCompteType()
