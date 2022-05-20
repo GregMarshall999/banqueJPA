@@ -1,11 +1,11 @@
 package fr.dawan.entities;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity
-@Table(name="CompteEpargne")
+@DiscriminatorValue("COMPTE_EPARGNE")
 public class CompteEpargne extends Compte
 {
     private static final long serialVersionUID = -1465644998715595702L;
